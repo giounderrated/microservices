@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: eureka-server
+server:
+  port: 8761
+eureka:
+  client:
+    # This should be enabled just for clients and due to this is the server, its not necessary
+    fetch-registry: false
+    register-with-eureka: false
+
+
