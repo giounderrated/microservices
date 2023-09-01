@@ -14,7 +14,7 @@ public record NotificationController(NotificationService notificationService) {
 
     @PostMapping
     public void sendNotification(@RequestBody NotificationRequest notificationRequest){
-        log.info("Sending notification to {}", notificationRequest.toCustomerEmail());
+        log.info("Sending notification to customer {}", notificationRequest.toCustomerEmail());
         notificationService.sendNotification(notificationRequest);
     }
 

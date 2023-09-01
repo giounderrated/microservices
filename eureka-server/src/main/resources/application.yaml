@@ -8,5 +8,13 @@ eureka:
     # This should be enabled just for clients and due to this is the server, its not necessary
     fetch-registry: false
     register-with-eureka: false
-
-
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411
+logging:
+  pattern:
+    level: '"%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"'

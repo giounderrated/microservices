@@ -1,7 +1,8 @@
-package org.example.customer;
+package com.example.customer;
+import com.example.amqp.RabbitMQMessageProducer;
 import com.example.clients.fraud.FraudCheckResponse;
 import com.example.clients.fraud.FraudClient;
-import com.example.clients.notification.NotificationClient;
+//import com.example.clients.notification.NotificationClient;
 import com.example.clients.notification.NotificationRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -11,9 +12,10 @@ import java.util.List;
 @Service
 public record CustomerService(
         CustomerRepository repository,
-        RestTemplate template,
+//        RestTemplate template,
         FraudClient fraudClient,
-        NotificationClient notificationClient
+//        NotificationClient notificationClient,
+        RabbitMQMessageProducer messageProducer
 ) {
 
     public void registerCustomer(CustomerRegistrationRequest request) {
@@ -42,8 +44,13 @@ public record CustomerService(
                 customer.getId(),
                 customer.getEmail(),
                 String.format("Hi %s, from gio.",customer.getFirstname()));
-        notificationClient.sendNotification(notificationRequest);
-
+//        notificationClient.sendNotification(notificationRequest);
+        //adding to the queue
+        messageProducer.publish(
+                notificationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key"
+        );
     }
 
     public List<Customer> getAllCustomers() {
